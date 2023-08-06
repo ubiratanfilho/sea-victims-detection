@@ -1,33 +1,8 @@
 # JSON Data to CSV
 ## This code is used to convert JSON data to CSV format
-
 import json
 import pandas as pd
 import os
-
-def json_images_to_csv(json_path: list, csv_path: str):
-    """
-    This function is used to convert JSON data to CSV format
-    
-    Arguments:
-        json_path: list
-            Path to JSON file
-        csv_path: str
-            Path to CSV file
-    """
-    # elif _type == 'images':
-    #     data = json_data['images']
-        
-    #     df = pd.DataFrame(data)
-        
-    #     # now expand the column 'source'
-    #     df = pd.concat([df.drop(['source'], axis=1), df['source'].apply(pd.Series)], axis=1)
-    #     # now expand the column 'meta'
-    #     df = pd.concat([df.drop(['meta'], axis=1), df['meta'].apply(pd.Series)], axis=1)
-    # else:
-    #     raise ValueError('Invalid type')
-    # df.to_csv(csv_path, index=False)
-
 
 def json_annotations_to_csv(json_paths: list, csv_path: str):
     """
