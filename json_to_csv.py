@@ -4,6 +4,43 @@ import json
 import pandas as pd
 import os
 
+def json_images_to_csv(json_path: list, csv_path: str):
+    
+    """
+    This function is used to convert JSON data to CSV format
+    
+    Arguments:
+        json_path: str
+            Path to JSON file
+        csv_path: str
+            Path to CSV file
+    """
+    df_all = pd.DataFrame()
+    
+    for json_path in json_paths:
+        with open(json_path) as json_file:
+            json_data = json.load(json_file)
+        data = json_data['images']
+        df = pd.DataFrame(data)
+        
+        # expand the column source
+        df = pd.concat([df.drop('source', axis=1), df['source'].apply(pd.Series)], axis=1)
+        # expand the column meta
+        df = pd.concat([df.drop('meta', axis=1), df['meta'].apply(pd.Series)], axis=1)
+        # drop the id column
+        df = df.drop(['id'], axis=1)
+        
+        # concat the dataframes
+        df_all = pd.concat([df_all, df])
+    df_all = df_all.reset_index(drop=True)
+    
+    # save the dataframe to csv
+    df_all.to_csv(csv_path, index=False)
+    
+    return df_all
+    
+
+
 def json_annotations_to_csv(json_paths: list, csv_path: str):
     """
     This function is used to convert JSON data to CSV format
@@ -58,8 +95,9 @@ def json_annotations_to_csv(json_paths: list, csv_path: str):
     return df
 
 json_paths = [
-    'data/instances_train.json',
-    'data/instances_val.json'
+    'data/json/instances_train.json',
+    'data/json/instances_val.json'
 ]
 
-json_annotations_to_csv(json_paths, 'data/train.csv')
+# json_annotations_to_csv(json_paths, 'data/train.csv')
+json_images_to_csv(json_paths, 'data/train_images_metadata.csv')
