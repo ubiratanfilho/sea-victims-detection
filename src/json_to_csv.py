@@ -4,7 +4,7 @@ import json
 import pandas as pd
 import os
 
-def json_images_to_csv(json_path: list, csv_path: str):
+def json_images_to_csv(json_paths: list, csv_path: str):
     
     """
     This function is used to convert JSON data to CSV format
@@ -41,7 +41,7 @@ def json_images_to_csv(json_path: list, csv_path: str):
     
 
 
-def json_annotations_to_csv(json_paths: list, csv_path: str):
+def json_annotations_to_csv(json_paths: list, csv_path: str, images_path: str):
     """
     This function is used to convert JSON data to CSV format
     
@@ -69,14 +69,14 @@ def json_annotations_to_csv(json_paths: list, csv_path: str):
         # drop the column 'id'
         df_people = df_people.drop(['id'], axis=1)
         # alter the id column to 'file_name'
-        df_people['file_name'] = df_people.index.astype(str) + '.png'
+        df_people['file_name'] = df_people.index.astype(str) + '.jpg'
         # reset the index
         df_people = df_people.reset_index(drop=True)
         # add to the df_all
         df_all = pd.concat([df_all, df_people])
         
     # get all the images
-    list_imgs = os.listdir('data/train')
+    list_imgs = os.listdir(images_path)
     
     # create a dataframe
     df_imgs = pd.DataFrame(list_imgs)
@@ -94,10 +94,10 @@ def json_annotations_to_csv(json_paths: list, csv_path: str):
         
     return df
 
-json_paths = [
-    'data/json/instances_train.json',
-    'data/json/instances_val.json'
-]
+# json_paths = [
+#     'data/json/instances_train.json',
+#     'data/json/instances_val.json'
+# ]
 
-# json_annotations_to_csv(json_paths, 'data/train.csv')
-json_images_to_csv(json_paths, 'data/train_images_metadata.csv')
+json_images_to_csv(['../data/compressed/annotations/instances_val.json'], '../data/compressed/val_images_metadata.csv')
+json_annotations_to_csv(['../data/compressed/annotations/instances_val.json'], '../data/compressed/val_annotations.csv', '../data/compressed/images/val')
